@@ -1,6 +1,6 @@
-name := "pm-quadtree"
+name := "jst"
 
-organization := "sterkh66"
+organization := "com.github.sterkh66"
 
 version := "0.1"
 
@@ -13,10 +13,14 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 )
 
-//resolvers += DefaultMavenRepository
+publishTo := {
+  val nexus = "https://oss.sonatype.org/"
 
-//publishTo := Some(DefaultMavenRepository)
-publishTo := Some("Sonatype Snapshots Nexus" at "https://oss.sonatype.org/content/repositories/releases")
+  if (isSnapshot.value)
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+}
 
-
+credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
         
