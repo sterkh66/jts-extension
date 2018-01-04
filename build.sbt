@@ -4,7 +4,26 @@ organization := "com.github.sterkh66"
 
 version := "0.1"
 
-scalaVersion := "2.12.4"
+description := "Java geospatial utils"
+
+scalaVersion := "2.11.8"
+
+licenses := Seq("GPL-3.0" -> url("https://opensource.org/licenses/GPL-3.0"))
+
+homepage := Some(url("https://github.com/sterkh66/geospatial"))
+
+scmInfo := Some(ScmInfo(url("https://github.com/sterkh66/geospatial"), "git@github.com:sterkh66/geospatial.git"))
+
+developers := List(
+  Developer(
+    id    = "sterkh66",
+    name  = "Yuri Z.",
+    email = "pmcc@yandex.ru",
+    url   = url("https://github.com/sterkh66")
+  )
+)
+
+pgpReadOnly := false
 
 libraryDependencies ++= Seq(
   "com.opencsv" % "opencsv" % "3.8",
