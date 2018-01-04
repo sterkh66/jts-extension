@@ -205,6 +205,8 @@ class QuadTree() extends Serializable {
   var shapes = List.empty[Shape]
   var index: Node = _
 
+  var attributes: Map[String, Map[Int, String]] = _
+
   def createIndex(shapeList: List[Shape], depth: Int): Node = {
 
     shapes = shapeList
@@ -222,21 +224,53 @@ class QuadTree() extends Serializable {
     index
   }
 
-  def createIndex(csvFilePath: String, idColumn: Int, wktColumn: Int, depth: Int, separator: Char = ',', quoteChar: Char = '\"', line: Int = 1): Node = {
+  def createIndex(csvFilePath: String, idColumn: Int, wktColumn: Int, depth: Int, attrs: List[Int] = List.empty[Int], separator: Char = ',', quoteChar: Char = '\"', fromLine: Int = 1): Node = {
 
     import collection.JavaConverters._
 
     val bufReader = new BufferedReader(new FileReader(csvFilePath))
 
-    val csvReader = new CSVReader(bufReader, separator, quoteChar, line)
+    val csvReader = new CSVReader(bufReader, separator, quoteChar, fromLine)
 
     val lines: List[Array[String]] = csvReader.readAll().asScala.toList
 
+    val wkt = new WKTReader()
+
     val shapeList = lines.map(line => {
-      Shape(line(idColumn), new WKTReader().read(line(wktColumn)))
+      Shape(line(idColumn), wkt.read(line(wktColumn)))
     })
 
+    val lineBuf = scala.collection.mutable.Map[String, Map[Int, String]]()
+
+    // read attributes
+    if (attrs.nonEmpty) {
+      lines.foreach(line => {
+        val id = line(idColumn)
+        val attrBuf = scala.collection.mutable.Map[Int, String]()
+        attrs.foreach(attr => {
+          attrBuf(attr) = line(attr)
+        })
+        lineBuf(id) = attrBuf.toMap
+      })
+      attributes = lineBuf.toMap
+    }
+
     createIndex(shapeList, depth)
+  }
+  
+  def getIndex: Node = {
+    index
+  }
+
+  def getAttr(id: String, attr: Int): String = {
+    var res = ""
+    
+    if (attributes != null) {
+      val map = attributes.getOrElse(id, Map.empty[Int, String])
+      res = map.getOrElse(attr, "")
+    }
+    
+    res
   }
 
   def writeIndex(filePath: String): Unit = {

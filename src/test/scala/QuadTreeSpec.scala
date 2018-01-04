@@ -5,10 +5,12 @@ import org.sterkh.spatial.{QuadTree, Shape, Node}
 
 class QuadTreeSpec extends FlatSpec with Matchers {
 
-    val square1 = Shape("s1", new WKTReader().read("POLYGON ((3 3, 3 4, 4 4, 4 3, 3 3))"))
-    val square2 = Shape("s2", new WKTReader().read("POLYGON ((10 10, 10 11, 11 11, 11 10, 10 10))"))
-    val concave = Shape("cc", new WKTReader().read("POLYGON ((0 4, 3 5, 4 8, 5 5, 8 4, 5 3, 4 0, 3 3, 0 4))"))
-    val convex = Shape("cv", new WKTReader().read("POLYGON ((4 8, 5 10, 8 11, 10 7, 8 4, 5 5, 4 8))"))
+  val wkt = new WKTReader()
+
+  val square1 = Shape("s1", wkt.read("POLYGON ((3 3, 3 4, 4 4, 4 3, 3 3))"))
+  val square2 = Shape("s2", wkt.read("POLYGON ((10 10, 10 11, 11 11, 11 10, 10 10))"))
+  val concave = Shape("cc", wkt.read("POLYGON ((0 4, 3 5, 4 8, 5 5, 8 4, 5 3, 4 0, 3 3, 0 4))"))
+  val convex = Shape("cv", wkt.read("POLYGON ((4 8, 5 10, 8 11, 10 7, 8 4, 5 5, 4 8))"))
 
   "quadtree create index " should "be correct" in  {
 
@@ -68,5 +70,29 @@ class QuadTreeSpec extends FlatSpec with Matchers {
     shape1.touches(shape2) should equal(true)
     shape1.contains(shape2) should equal(false)
     shape1.intersects(shape2) should equal(true)
+  }
+
+  "get valid attribute" should "be correct" in  {
+
+    val path = getClass.getResource("/shapes.csv").toURI.getPath
+    val qt = new QuadTree()
+
+    qt.createIndex(path, 1, 0, 4, List(2))
+
+    val result = qt.getAttr("f1", 2)
+
+    result should equal("1")
+  }
+
+  "get invalid attribute" should "be correct" in  {
+
+    val path = getClass.getResource("/shapes.csv").toURI.getPath
+    val qt = new QuadTree()
+
+    qt.createIndex(path, 1, 0, 4, List(2))
+
+    val result = qt.getAttr("f1", 10)
+
+    result should equal("")
   }
 }
