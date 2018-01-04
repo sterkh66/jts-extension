@@ -1,2 +1,35 @@
 *.class
 *.log
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# sbt specific
+.cache
+.history
+#.lib/
+#dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+
+*/metastore_db/*
+metastore_db/
+
+# compiler stuff
+*.cache
+
+# idea project
+.idea/
+*.iml
+
+# local db
+*.parquet
+# *.csv
+grid*.txt
+.ipynb_checkpoints/
+__pycache__/
+#env
+
