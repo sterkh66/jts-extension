@@ -2,7 +2,7 @@ name := "geospatial"
 
 organization := "com.github.sterkh"
 
-version := "0.2"
+version := "0.2-SNAPSHOT"
 
 description := "Java geospatial utils"
 
