@@ -1,4 +1,4 @@
-package org.sterkh.spatial
+package com.github.sterkh.spatial
 
 import java.io.{BufferedReader, FileReader}
 
@@ -116,7 +116,7 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
     nodeId
   }
 
-  def insert(shape: Shape): Unit = {
+  private def insert(shape: Shape): Unit = {
 
     val geom = shape.geometry
 
@@ -153,7 +153,7 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
     }
   }
 
-  def queryPoint(point: Point): Set[Shape] = {
+  private def queryPoint(point: Point): Set[Shape] = {
 
     var result = Set.empty[Shape]
 
@@ -182,7 +182,7 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
     result
   }
 
-  def queryPoint(x: Double, y: Double): Set[Shape] = {
+  private def queryPoint(x: Double, y: Double): Set[Shape] = {
 
     val point = new GeometryFactory().createPoint(new Coordinate(x, y))
     queryPoint(point)

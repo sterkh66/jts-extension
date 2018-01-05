@@ -1,8 +1,8 @@
 name := "geospatial"
 
-organization := "com.github.sterkh66"
+organization := "com.github.sterkh"
 
-version := "0.1"
+version := "0.2"
 
 description := "Java geospatial utils"
 

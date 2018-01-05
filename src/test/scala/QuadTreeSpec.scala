@@ -1,7 +1,7 @@
 import com.vividsolutions.jts.io.WKTReader
 import com.vividsolutions.jts.geom.{Coordinate, GeometryFactory, Point}
 import org.scalatest._
-import org.sterkh.spatial.{QuadTree, Shape, Node}
+import com.github.sterkh.spatial.{QuadTree, Shape, Node}
 
 class QuadTreeSpec extends FlatSpec with Matchers {
 

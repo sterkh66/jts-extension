@@ -1,4 +1,4 @@
-package org.sterkh
+package com.github.sterkh
 
 package object spatial {
   val QT_NODE_CAPACITY: Int = 4
