@@ -97,6 +97,23 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
     queryNode(nodeIdtoString(nodeId))
   }
 
+  def countNodes(node: Node, leavesOnly: Boolean = false): Int = {
+    var numNodes = 0
+
+    if (node.northWest != null) {
+      if (!leavesOnly)
+        numNodes += 1
+      numNodes += countNodes(node.northWest, leavesOnly)
+      numNodes += countNodes(node.northEast, leavesOnly)
+      numNodes += countNodes(node.southWest, leavesOnly)
+      numNodes += countNodes(node.southEast, leavesOnly)
+    } else {
+      numNodes += 1
+    }
+
+    numNodes
+  }
+  
   def nodeIdtoString(nodeId: Int): String = {
     var idStr: String = ""
 
@@ -116,7 +133,7 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
     nodeId
   }
 
-  private def insert(shape: Shape): Unit = {
+  def insert(shape: Shape): Unit = {
 
     val geom = shape.geometry
 

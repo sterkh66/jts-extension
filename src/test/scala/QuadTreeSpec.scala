@@ -21,6 +21,17 @@ class QuadTreeSpec extends FlatSpec with Matchers {
     qti should not be (null)
   }
 
+  "quadtree count nodes" should "be correct" in  {
+
+    val qt = new QuadTree()
+
+    val qti = qt.createIndex(List(square1, square2), 4)
+
+    qti.countNodes(qti, leavesOnly = false) should be (45)
+    qti.countNodes(qti, leavesOnly = true) should be (34)
+  }
+
+
   "quadtree simple query index " should "be correct" in  {
 
     val qt = new QuadTree()
