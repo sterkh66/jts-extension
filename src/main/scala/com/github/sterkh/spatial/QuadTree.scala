@@ -192,7 +192,6 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
           //println("refine", nodeIdtoString(id))
           result = result.filter(s => s.geometry.contains(point))
         }
-
       }
     }
 

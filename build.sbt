@@ -1,18 +1,18 @@
-name := "geospatial"
+name := "jts-extension"
 
 organization := "com.github.sterkh"
 
 version := "0.2-SNAPSHOT"
 
-description := "Java geospatial utils"
+description := "Scala extension for Java Topology Suite (JTS)"
 
 scalaVersion := "2.11.8"
 
 licenses := Seq("GPL-3.0" -> url("https://opensource.org/licenses/GPL-3.0"))
 
-homepage := Some(url("https://github.com/sterkh66/geospatial"))
+homepage := Some(url("https://github.com/sterkh66/jts-extension"))
 
-scmInfo := Some(ScmInfo(url("https://github.com/sterkh66/geospatial"), "git@github.com:sterkh66/geospatial.git"))
+scmInfo := Some(ScmInfo(url("https://github.com/sterkh66/jts-extension"), "git@github.com:sterkh66/jts-extension.git"))
 
 developers := List(
   Developer(

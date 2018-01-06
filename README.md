@@ -1,6 +1,6 @@
-# Scala GeoSpatial
+# Scala extension for Java Topology Suite (JTS)
 
-Provides various spatial utils such as:
+Provides various spatial utils over JTS such as:
 * polygon map quad tree (trie) spatial indexing; fast querying: 1 million points in less than 3 seconds !
 
 Example:
