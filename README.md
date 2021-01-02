@@ -8,7 +8,7 @@ Provides various spatial utils over JTS such as:
 Example:
 query polygons containing point
 
-```
+```scala
       import com.github.sterkh.spatial.{QuadTree, Shape}
       import com.vividsolutions.jts.io.WKTReader
       

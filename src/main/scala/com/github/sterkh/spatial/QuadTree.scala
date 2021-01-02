@@ -33,10 +33,10 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
       new Coordinate(env.getMinX, env.getMinY)
     )
 
-    val fact = new GeometryFactory()
+    val factory = new GeometryFactory()
     val linear = new GeometryFactory().createLinearRing(coordinates)
 
-    new Polygon(linear, null, fact)
+    new Polygon(linear, null, factory)
   }
 
   private def toWKT(geometry: Geometry): String = {
@@ -94,7 +94,7 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
   }
 
   def queryNode(nodeId: Int): Set[String] = {
-    queryNode(nodeIdtoString(nodeId))
+    queryNode(nodeIdToString(nodeId))
   }
 
   def countNodes(node: Node, leavesOnly: Boolean = false): Int = {
@@ -113,8 +113,8 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
 
     numNodes
   }
-  
-  def nodeIdtoString(nodeId: Int): String = {
+
+  def nodeIdToString(nodeId: Int): String = {
     var idStr: String = ""
 
     var id = nodeId
@@ -127,7 +127,7 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
     idStr.reverse
   }
 
-  def nodeIdfromString(str: String): Int = {
+  def nodeIdFromString(str: String): Int = {
     var nodeId: Int = 0
     str.reverse.foreach(c => (nodeId << 2) + c.toInt )
     nodeId
@@ -137,14 +137,14 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
 
     val geom = shape.geometry
 
-//    if (level == 5 && nodeIdtoString(id) == "13322")
-//      println(level, id, nodeIdtoString(id), ids, extent, extent.intersection(geom))
+//    if (level == 5 && nodeIdToString(id) == "13322")
+//      println(level, id, nodeIdToString(id), ids, extent, extent.intersection(geom))
 
     if (level <= maxLevel) {
 
       if (geom.contains(extent)) {
         addShape(shape)
-//        println(nodeIdtoString(id),"contains")
+//        println(nodeIdToString(id),"contains")
         return
       }
 
@@ -293,6 +293,7 @@ class QuadTree() extends Serializable {
 
     import java.io.FileOutputStream
     import java.io.ObjectOutputStream
+
     val out = new ObjectOutputStream(new FileOutputStream(filePath))
     out.writeObject(index)
   }
@@ -301,6 +302,7 @@ class QuadTree() extends Serializable {
 
     import java.io.FileInputStream
     import java.io.ObjectInputStream
+
     val in = new ObjectInputStream(new FileInputStream(filePath))
 
     index = in.readObject().asInstanceOf[Node]
