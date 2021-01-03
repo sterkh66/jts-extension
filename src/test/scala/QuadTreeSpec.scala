@@ -1,5 +1,5 @@
-import com.vividsolutions.jts.io.WKTReader
-import com.vividsolutions.jts.geom.{Coordinate, GeometryFactory, Point}
+import org.locationtech.jts.io.WKTReader
+import org.locationtech.jts.geom.{Coordinate, GeometryFactory, Point}
 import org.scalatest._
 import com.github.sterkh.spatial.{QuadTree, Shape, Node}
 
@@ -14,27 +14,27 @@ class QuadTreeSpec extends FlatSpec with Matchers {
 
   "quadtree create index " should "be correct" in  {
 
-    val qt = new QuadTree()
+    val qt = new QuadTree[String]()
 
     val qti = qt.createIndex(List(square1, square2), 4)
 
-    qti should not be (null)
+    qti should not be null
   }
 
   "quadtree count nodes" should "be correct" in  {
 
-    val qt = new QuadTree()
+    val qt = new QuadTree[String]()
 
     val qti = qt.createIndex(List(square1, square2), 4)
 
-    qti.countNodes(qti, leavesOnly = false) should be (45)
+    qti.countNodes(qti) should be (45)
     qti.countNodes(qti, leavesOnly = true) should be (34)
   }
 
 
   "quadtree simple query index " should "be correct" in  {
 
-    val qt = new QuadTree()
+    val qt = new QuadTree[String]()
 
     val qti = qt.createIndex(List(square1, square2), 4)
 
@@ -47,7 +47,7 @@ class QuadTreeSpec extends FlatSpec with Matchers {
 
   "quadtree concave query index " should "be correct" in  {
 
-    val qt = new QuadTree()
+    val qt = new QuadTree[String]()
 
     val qti = qt.createIndex(List(concave), 8)
 
@@ -59,7 +59,7 @@ class QuadTreeSpec extends FlatSpec with Matchers {
 
   "quadtree neighbours query index " should "be correct" in  {
 
-    val qt = new QuadTree()
+    val qt = new QuadTree[String]()
 
     val qti = qt.createIndex(List(concave, convex), 8)
 
@@ -86,7 +86,7 @@ class QuadTreeSpec extends FlatSpec with Matchers {
   "get valid attribute" should "be correct" in  {
 
     val path = getClass.getResource("/shapes.csv").toURI.getPath
-    val qt = new QuadTree()
+    val qt = new QuadTree[String]()
 
     qt.createIndex(path, 1, 0, 4, List(2))
 
@@ -98,7 +98,7 @@ class QuadTreeSpec extends FlatSpec with Matchers {
   "get invalid attribute" should "be correct" in  {
 
     val path = getClass.getResource("/shapes.csv").toURI.getPath
-    val qt = new QuadTree()
+    val qt = new QuadTree[String]()
 
     qt.createIndex(path, 1, 0, 4, List(2))
 

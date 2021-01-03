@@ -1,6 +1,6 @@
 package com.github.sterkh.spatial
 
-import com.vividsolutions.jts.geom.{Envelope, GeometryFactory, LineSegment}
+import org.locationtech.jts.geom.{Envelope, GeometryFactory, LineSegment}
 
 
 object Utils {

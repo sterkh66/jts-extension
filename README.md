@@ -10,7 +10,7 @@ query polygons containing point
 
 ```scala
       import com.github.sterkh.spatial.{QuadTree, Shape}
-      import com.vividsolutions.jts.io.WKTReader
+      import org.locationtech.jts.io.WKTReader
       
 
       val wkt = new WKTReader()

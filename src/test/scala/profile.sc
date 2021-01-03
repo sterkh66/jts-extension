@@ -12,6 +12,7 @@ val coords = (1 to 100).map(e => {(lon1 + dlon * rand.nextFloat, lat1 + dlat * r
 
 val qt = new QuadTree()
 
-val qti = qt.createIndex("/Users/yuri/Documents/mdt/transp_districts.csv", 1, 0, 10)
+val qti = qt.createIndex("/Users/yuri/Documents/mdt/transp_districts.csv",
+  1, 0, 10)
 
 coords.foreach(c => {println(qti.query(c._1, c._2))})

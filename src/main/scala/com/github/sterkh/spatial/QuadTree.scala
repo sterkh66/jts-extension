@@ -3,22 +3,22 @@ package com.github.sterkh.spatial
 import java.io.{BufferedReader, FileReader}
 
 import com.opencsv.CSVReader
-import com.vividsolutions.jts.geom._
-import com.vividsolutions.jts.io.{WKTReader, WKTWriter}
-import com.vividsolutions.jts.io.ParseException
+import org.locationtech.jts.geom._
+import org.locationtech.jts.io.{WKTReader, WKTWriter}
+import org.locationtech.jts.io.ParseException
 
 
 
-case class Shape(id: String, geometry: Geometry) extends Serializable
+case class Shape[T](id: T, geometry: Geometry) extends Serializable
 
-class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extends Serializable {
+class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extends Serializable {
 
-  var northWest: Node = _
-  var northEast: Node = _
-  var southWest: Node = _
-  var southEast: Node = _
+  var northWest: Node[T] = _
+  var northEast: Node[T] = _
+  var southWest: Node[T] = _
+  var southEast: Node[T] = _
 
-  var ids = Set.empty[Shape]
+  var ids = Set.empty[Shape[T]]
 
 //  println(id)
   private val maxLevel = if (depth > QT_NODE_MAX_LEVEL) QT_NODE_MAX_LEVEL else depth
@@ -46,7 +46,7 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
     wkt.write(geometry)
   }
 
-  private def addShape(shape: Shape){
+  private def addShape(shape: Shape[T]){
     ids = ids + shape
 //    if (level == 5 && nodeIdtoString(id) == "13322")
 //      println(level, id, nodeIdtoString(id), ids)
@@ -80,7 +80,7 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
 //    } else ids
 //  }
 
-  def queryNode(nodeId: String): Set[String] = {
+  def queryNode(nodeId: String): Set[T] = {
 
       if (nodeId.nonEmpty  && northWest != null) {
         val quad = nodeId.head.toInt
@@ -93,11 +93,11 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
       } else ids.map(_.id)
   }
 
-  def queryNode(nodeId: Int): Set[String] = {
+  def queryNode(nodeId: Int): Set[T] = {
     queryNode(nodeIdToString(nodeId))
   }
 
-  def countNodes(node: Node, leavesOnly: Boolean = false): Int = {
+  def countNodes(node: Node[T], leavesOnly: Boolean = false): Int = {
     var numNodes = 0
 
     if (node.northWest != null) {
@@ -133,7 +133,7 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
     nodeId
   }
 
-  def insert(shape: Shape): Unit = {
+  def insert(shape: Shape[T]): Unit = {
 
     val geom = shape.geometry
 
@@ -170,9 +170,9 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
     }
   }
 
-  private def queryPoint(point: Point): Set[Shape] = {
+  private def queryPoint(point: Point): Set[Shape[T]] = {
 
-    var result = Set.empty[Shape]
+    var result = Set.empty[Shape[T]]
 
     // если есть попадание в текущий квандрант
     if (extent.getEnvelopeInternal.contains(point.getX, point.getY)){
@@ -198,32 +198,32 @@ class Node(extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extend
     result
   }
 
-  private def queryPoint(x: Double, y: Double): Set[Shape] = {
+  private def queryPoint(x: Double, y: Double): Set[Shape[T]] = {
 
     val point = new GeometryFactory().createPoint(new Coordinate(x, y))
     queryPoint(point)
   }
 
-  def query(x: Double, y: Double): Set[String] = {
+  def query(x: Double, y: Double): Set[T] = {
 
     queryPoint(x, y).map(_.id)
   }
 
-  def query(point: Point): Set[String] = {
+  def query(point: Point): Set[T] = {
 
     queryPoint(point).map(_.id)
   }
 }
 
-class QuadTree() extends Serializable {
+class QuadTree[T]() extends Serializable {
 
   var extent: Geometry = _
-  var shapes = List.empty[Shape]
-  var index: Node = _
+  var shapes = List.empty[Shape[T]]
+  var index: Node[T] = _
 
   var attributes: Map[String, Map[Int, String]] = _
 
-  def createIndex(shapeList: List[Shape], depth: Int): Node = {
+  def createIndex(shapeList: List[Shape[T]], depth: Int): Node[T] = {
 
     shapes = shapeList
 
@@ -240,7 +240,14 @@ class QuadTree() extends Serializable {
     index
   }
 
-  def createIndex(csvFilePath: String, idColumn: Int, wktColumn: Int, depth: Int, attrs: List[Int] = List.empty[Int], separator: Char = ',', quoteChar: Char = '\"', fromLine: Int = 1): Node = {
+  def createIndex(csvFilePath: String,
+                  idColumn: Int,
+                  wktColumn: Int,
+                  depth: Int,
+                  attrs: List[Int] = List.empty[Int],
+                  separator: Char = ',',
+                  quoteChar: Char = '\"',
+                  fromLine: Int = 1): Node[T] = {
 
     import collection.JavaConverters._
 
@@ -253,7 +260,7 @@ class QuadTree() extends Serializable {
     val wkt = new WKTReader()
 
     val shapeList = lines.map(line => {
-      Shape(line(idColumn), wkt.read(line(wktColumn)))
+      Shape(line(idColumn).asInstanceOf[T], wkt.read(line(wktColumn)))
     })
 
     val lineBuf = scala.collection.mutable.Map[String, Map[Int, String]]()
@@ -274,7 +281,7 @@ class QuadTree() extends Serializable {
     createIndex(shapeList, depth)
   }
   
-  def getIndex: Node = {
+  def getIndex: Node[T] = {
     index
   }
 
@@ -305,7 +312,7 @@ class QuadTree() extends Serializable {
 
     val in = new ObjectInputStream(new FileInputStream(filePath))
 
-    index = in.readObject().asInstanceOf[Node]
+    index = in.readObject().asInstanceOf[Node[T]]
   }
 
 }
