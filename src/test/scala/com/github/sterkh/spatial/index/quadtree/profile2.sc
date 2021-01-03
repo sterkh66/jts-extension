@@ -1,7 +1,7 @@
 
 import java.io.{BufferedReader, FileReader}
 
-import com.github.sterkh.spatial.{QuadTree, Shape}
+import com.github.sterkh.spatial.index.quadtree._
 import com.opencsv.CSVReader
 import org.locationtech.jts.io.WKTReader
 

@@ -2,7 +2,7 @@ name := "jts-extension"
 
 organization := "com.github.sterkh"
 
-version := "0.2.1-SNAPSHOT"
+version := "0.3.0-SNAPSHOT"
 
 description := "Scala extension for Java Topology Suite (JTS)"
 

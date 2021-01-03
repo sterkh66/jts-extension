@@ -1,4 +1,4 @@
-package com.github.sterkh.spatial
+package com.github.sterkh.spatial.index.quadtree
 
 import java.io.{BufferedReader, FileReader}
 

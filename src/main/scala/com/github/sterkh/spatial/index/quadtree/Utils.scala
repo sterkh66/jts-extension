@@ -1,4 +1,4 @@
-package com.github.sterkh.spatial
+package com.github.sterkh.spatial.index.quadtree
 
 import org.locationtech.jts.geom.{Envelope, GeometryFactory, LineSegment}
 
