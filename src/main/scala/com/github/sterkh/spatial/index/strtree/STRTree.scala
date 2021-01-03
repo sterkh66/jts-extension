@@ -2,6 +2,7 @@ package com.github.sterkh.spatial.index.strtree
 
 import java.io.{BufferedReader, FileReader}
 
+import com.github.sterkh.spatial.index.Shape
 import com.opencsv.CSVReader
 import org.locationtech.jts.geom.{Coordinate, Geometry, GeometryFactory, Point}
 import org.locationtech.jts.index.strtree.{ItemBoundable, ItemDistance, STRtree}
@@ -51,7 +52,7 @@ class STRTree[T] extends Serializable {
     val hits = strTree.query(point.getEnvelopeInternal).asScala.map(_.asInstanceOf[Shape[T]])
 
     hits.filter(_.geometry.intersects(point)).map(_.id) match {
-      case s @ Seq(head, tail @ _*) => s.toSet
+      case s @ Seq(_, _*) => s.toSet
       case Seq() if radiusDeg > 0.0 =>
         val neighbours = strTree.nearestNeighbour(point.getEnvelopeInternal,
           Shape(0L, point), new Distance, neighboursMax).map(_.asInstanceOf[Shape[T]])
@@ -64,7 +65,6 @@ class STRTree[T] extends Serializable {
 }
 
 object STRTree extends Serializable {
-  case class Shape[T](id: T, geometry: Geometry)
 
   def loadShapes[T](csvFilePath: String,
                     idColumn: Int,

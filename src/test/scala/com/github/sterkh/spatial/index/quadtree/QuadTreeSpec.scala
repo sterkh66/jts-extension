@@ -1,5 +1,6 @@
 package com.github.sterkh.spatial.index.quadtree
 
+import com.github.sterkh.spatial.index.Shape
 import org.locationtech.jts.io.WKTReader
 import org.locationtech.jts.geom.{Coordinate, GeometryFactory, Point}
 import org.scalatest._

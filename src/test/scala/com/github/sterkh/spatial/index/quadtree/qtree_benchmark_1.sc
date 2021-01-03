@@ -1,4 +1,4 @@
-import com.github.sterkh.spatial.index.quadtree._
+import com.github.sterkh.spatial.index.quadtree.QuadTree
 
 import scala.util.Random
 

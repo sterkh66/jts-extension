@@ -1,10 +1,9 @@
 package com.github.sterkh.spatial.index.strtree
 
+import com.github.sterkh.spatial.index.Shape
 import org.locationtech.jts.geom.{Coordinate, GeometryFactory}
 import org.locationtech.jts.io.WKTReader
 import org.scalatest._
-
-import STRTree._
 
 
 class STRTreeSpec extends FlatSpec with Matchers {
@@ -34,8 +33,6 @@ class STRTreeSpec extends FlatSpec with Matchers {
 
     val result = qt.queryIndex(point)
 
-    println(result)
-
     result should contain theSameElementsAs Set("s1")
   }
 
@@ -49,20 +46,20 @@ class STRTreeSpec extends FlatSpec with Matchers {
 
     val result = qt.queryIndex(point)
 
-//    result should contain theSameElementsAs Set("cc")
+    result should contain theSameElementsAs Set("cc")
   }
 
-  "strtree with neighbours query index " should "be correct" in  {
+  "strtree with neighbours check query index " should "be correct" in  {
 
     val qt = new STRTree[String]()
 
     qt.createIndex(List(concave, convex))
 
-    val point = new GeometryFactory().createPoint(new Coordinate(7.2, 4.2))
+    val point = new GeometryFactory().createPoint(new Coordinate(11.0, 11.0))
 
-    val result = qt.queryIndex(point)
+    val result = qt.queryIndex(point, 3.0, 2)
 
-//    result should contain theSameElementsAs Set("cc")
+    result should contain theSameElementsAs Set("cv")
   }
 
 }

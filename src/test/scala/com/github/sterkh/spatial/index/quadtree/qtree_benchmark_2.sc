@@ -1,7 +1,7 @@
 
 import java.io.{BufferedReader, FileReader}
 
-import com.github.sterkh.spatial.index.strtree._
+import com.github.sterkh.spatial.index.quadtree.QuadTree
 import com.opencsv.CSVReader
 import org.locationtech.jts.io.WKTReader
 
@@ -27,13 +27,9 @@ def getCities() = {
 }
 
 val t0 = System.nanoTime()
-val st = new STRTree[String]()
-
-val shapes = STRTree.loadShapes[String]("/Users/yuri/Documents/wkt/us_states.csv",
-  3, 0, 1, ';')
-
-st.createIndex(shapes)
-
+val qt = new QuadTree[String]()
+val qti = qt.createIndex("/Users/yuri/Documents/wkt/us_states.csv",
+  3, 0, 10, List.empty[Int], ';')
 val t1 = System.nanoTime()
 val cities = getCities()
 
@@ -41,7 +37,7 @@ println("Number of cities: " + cities.length)
 
 cities.foreach {
   c => {
-    val res = st.queryIndex(c.lng, c.lat)
+    val res = qti.query(c.lng, c.lat)
     //    println((c.city, c.state_name, qti.query(c.lng, c.lat)))
 
     res.headOption match {
