@@ -2,7 +2,7 @@ package com.github.sterkh.spatial.index.quadtree
 
 import com.github.sterkh.spatial.index.Shape
 import org.locationtech.jts.io.WKTReader
-import org.locationtech.jts.geom.{Coordinate, GeometryFactory, Point}
+import org.locationtech.jts.geom.{Coordinate, GeometryFactory}
 import org.scalatest._
 
 class QuadTreeSpec extends FlatSpec with Matchers {
@@ -32,7 +32,6 @@ class QuadTreeSpec extends FlatSpec with Matchers {
     qti.countNodes(qti) should be (45)
     qti.countNodes(qti, leavesOnly = true) should be (34)
   }
-
 
   "quadtree simple query index " should "be correct" in  {
 
@@ -71,7 +70,6 @@ class QuadTreeSpec extends FlatSpec with Matchers {
     result should contain theSameElementsAs Set("cc")
   }
 
-
   "intersects" should "be correct" in  {
 
     val shape1 = new WKTReader().read("POLYGON ((3 3, 3 4, 4 4, 4 3, 3 3))")
@@ -83,29 +81,5 @@ class QuadTreeSpec extends FlatSpec with Matchers {
     shape1.touches(shape2) should equal(true)
     shape1.contains(shape2) should equal(false)
     shape1.intersects(shape2) should equal(true)
-  }
-
-  "get valid attribute" should "be correct" in  {
-
-    val path = getClass.getResource("/shapes.csv").toURI.getPath
-    val qt = new QuadTree[String]()
-
-    qt.createIndex(path, 1, 0, 4, List(2))
-
-    val result = qt.getAttr("f1", 2)
-
-    result should equal("1")
-  }
-
-  "get invalid attribute" should "be correct" in  {
-
-    val path = getClass.getResource("/shapes.csv").toURI.getPath
-    val qt = new QuadTree[String]()
-
-    qt.createIndex(path, 1, 0, 4, List(2))
-
-    val result = qt.getAttr("f1", 10)
-
-    result should equal("")
   }
 }

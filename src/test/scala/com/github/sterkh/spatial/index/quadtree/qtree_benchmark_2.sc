@@ -1,23 +1,18 @@
 
 import java.io.{BufferedReader, FileReader}
-
 import com.github.sterkh.spatial.index.quadtree.QuadTree
 import com.opencsv.CSVReader
-import org.locationtech.jts.io.WKTReader
 
 
 case class City(city: String, state_id: String, state_name: String, county: String, lat: Float, lng: Float)
 
-def getCities() = {
+def getCities(): List[City] = {
 
   import collection.JavaConverters._
 
   val bufReader = new BufferedReader(new FileReader("/Users/yuri/Documents/wkt/us_cities.csv"))
   val csvReader = new CSVReader(bufReader, ',', '\"', 1)
-
   val lines: List[Array[String]] = csvReader.readAll().asScala.toList
-
-  val wkt = new WKTReader()
 
   val cities = lines.map(line => {
     City(line(0), line(2), line(3), line(5), line(6).toFloat, line(7).toFloat)
@@ -28,8 +23,10 @@ def getCities() = {
 
 val t0 = System.nanoTime()
 val qt = new QuadTree[String]()
-val qti = qt.createIndex("/Users/yuri/Documents/wkt/us_states.csv",
-  3, 0, 10, List.empty[Int], ';')
+val shapes = qt.readShapes[String]("/Users/yuri/Documents/wkt/us_states.csv",
+  3, 0, 1, ';')
+val qti = qt.createIndex(shapes, 10)
+
 val t1 = System.nanoTime()
 val cities = getCities()
 

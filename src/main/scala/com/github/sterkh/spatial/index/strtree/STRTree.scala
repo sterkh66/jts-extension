@@ -1,18 +1,14 @@
 package com.github.sterkh.spatial.index.strtree
 
-import java.io.{BufferedReader, FileReader}
-
-import com.github.sterkh.spatial.index.Shape
-import com.opencsv.CSVReader
-import org.locationtech.jts.geom.{Coordinate, Geometry, GeometryFactory, Point}
+import com.github.sterkh.spatial.index.{Shape, SpatialIndex}
+import org.locationtech.jts.geom.{Coordinate, GeometryFactory, Point}
 import org.locationtech.jts.index.strtree.{ItemBoundable, ItemDistance, STRtree}
-import org.locationtech.jts.io.WKTReader
 
 
 /**
   *
   */
-class STRTree[T] extends Serializable {
+class STRTree[T] extends SpatialIndex {
 
   import STRTree._
 
@@ -65,29 +61,6 @@ class STRTree[T] extends Serializable {
 }
 
 object STRTree extends Serializable {
-
-  def loadShapes[T](csvFilePath: String,
-                    idColumn: Int,
-                    wktColumn: Int,
-                    fromLine: Int = 1,
-                    separator: Char = ',',
-                    quoteChar: Char = '\"',
-                    attrs: List[Int] = List.empty[Int]): Seq[Shape[T]] = {
-
-    import collection.JavaConverters._
-
-    val bufReader = new BufferedReader(new FileReader(csvFilePath))
-
-    val csvReader = new CSVReader(bufReader, separator, quoteChar, fromLine)
-
-    val lines: List[Array[String]] = csvReader.readAll().asScala.toList
-
-    val wkt = new WKTReader()
-
-    lines.map(line => {
-      Shape(line(idColumn).asInstanceOf[T], wkt.read(line(wktColumn)))
-    })
-  }
 
   class Distance[T] extends ItemDistance {
     override def distance(itemBoundable: ItemBoundable, itemBoundable1: ItemBoundable): Double = {

@@ -28,9 +28,7 @@ pgpReadOnly := false
 libraryDependencies ++= Seq(
   "com.opencsv" % "opencsv" % "3.8",
   "org.locationtech.jts" % "jts-core" % "1.17.1",
-//  "org.locationtech.jts.io" % "jts-io-common" % "1.17.1",
-  "org.scalactic" %% "scalactic" % "3.0.4",
-  "org.scalatest" %% "scalatest" % "3.0.4" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.4" % Test
 )
 
 publishTo := {

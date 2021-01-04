@@ -4,7 +4,6 @@ import com.github.sterkh.spatial.index.Shape
 import org.locationtech.jts.geom._
 import org.locationtech.jts.io.WKTWriter
 
-
 /**
   *
   * @param extent
@@ -26,7 +25,6 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
   private val maxLevel = if (depth > QT_NODE_MAX_LEVEL) QT_NODE_MAX_LEVEL else depth
 
   private def toPolygon(env: Envelope): Polygon = {
-
     val coordinates = Array(
       new Coordinate(env.getMinX, env.getMinY),
       new Coordinate(env.getMinX, env.getMaxY),
@@ -36,15 +34,13 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
     )
 
     val factory = new GeometryFactory()
-    val linear = new GeometryFactory().createLinearRing(coordinates)
+    val linear = factory.createLinearRing(coordinates)
 
     new Polygon(linear, null, factory)
   }
 
   private def toWKT(geometry: Geometry): String = {
-
     val wkt = new WKTWriter()
-
     wkt.write(geometry)
   }
 
@@ -55,7 +51,6 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
   }
 
   private def subdivide(): Boolean = {
-
     val env = extent.getEnvelopeInternal
     val cx = env.centre.x
     val cy = env.centre.y
@@ -71,7 +66,6 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
   }
 
   def queryNode(nodeId: String): Set[T] = {
-
     if (nodeId.nonEmpty  && northWest != null) {
       val quad = nodeId.head.toInt
       quad & 0x03 match {
@@ -118,20 +112,17 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
   }
 
   def nodeIdFromString(str: String): Int = {
-    var nodeId: Int = 0
+    val nodeId: Int = 0
     str.reverse.foreach(c => (nodeId << 2) + c.toInt )
     nodeId
   }
 
   def insert(shape: Shape[T]): Unit = {
-
     val geom = shape.geometry
-
     //    if (level == 5 && nodeIdToString(id) == "13322")
     //      println(level, id, nodeIdToString(id), ids, extent, extent.intersection(geom))
 
     if (level <= maxLevel) {
-
       if (geom.contains(extent)) {
         addShape(shape)
         //        println(nodeIdToString(id),"contains")
@@ -146,11 +137,9 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
         addShape(shape)
 
         if (level < maxLevel) {
-
           if (northWest == null) {
             subdivide()
           }
-
           northWest.insert(intShape)
           northEast.insert(intShape)
           southWest.insert(intShape)
@@ -189,18 +178,15 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
   }
 
   private def queryPoint(x: Double, y: Double): Set[Shape[T]] = {
-
     val point = new GeometryFactory().createPoint(new Coordinate(x, y))
     queryPoint(point)
   }
 
   def query(x: Double, y: Double): Set[T] = {
-
     queryPoint(x, y).map(_.id)
   }
 
   def query(point: Point): Set[T] = {
-
     queryPoint(point).map(_.id)
   }
 }

@@ -1,9 +1,7 @@
 package com.github.sterkh.spatial.index.quadtree
 
-import org.locationtech.jts.io.WKTReader
-import org.locationtech.jts.geom.{Coordinate, GeometryFactory, Point, Envelope, LineSegment}
+import org.locationtech.jts.geom.{Envelope, LineSegment}
 import org.scalatest._
-
 
 
 class UtilsSpec extends FlatSpec with Matchers {

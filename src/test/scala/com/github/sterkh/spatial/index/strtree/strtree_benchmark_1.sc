@@ -8,7 +8,7 @@ import org.locationtech.jts.io.WKTReader
 
 case class City(city: String, state_id: String, state_name: String, county: String, lat: Float, lng: Float)
 
-def getCities() = {
+def getCities(): Seq[City] = {
 
   import collection.JavaConverters._
 
@@ -29,7 +29,7 @@ def getCities() = {
 val t0 = System.nanoTime()
 val st = new STRTree[String]()
 
-val shapes = STRTree.loadShapes[String]("/Users/yuri/Documents/wkt/us_states.csv",
+val shapes = st.readShapes[String]("/Users/yuri/Documents/wkt/us_states.csv",
   3, 0, 1, ';')
 
 st.createIndex(shapes)
