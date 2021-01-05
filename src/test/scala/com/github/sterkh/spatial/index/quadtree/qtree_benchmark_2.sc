@@ -1,4 +1,6 @@
 
+import com.github.sterkh.spatial.index.SpatialIndex
+
 import java.io.{BufferedReader, FileReader}
 import com.github.sterkh.spatial.index.quadtree.QuadTree
 import com.opencsv.CSVReader
@@ -23,7 +25,7 @@ def getCities(): List[City] = {
 
 val t0 = System.nanoTime()
 val qt = new QuadTree[String]()
-val shapes = qt.readShapes[String]("/Users/yuri/Documents/wkt/us_states.csv",
+val shapes = SpatialIndex.readShapes[String]("/Users/yuri/Documents/wkt/us_states.csv",
   3, 0, 1, ';')
 val qti = qt.createIndex(shapes, 10)
 

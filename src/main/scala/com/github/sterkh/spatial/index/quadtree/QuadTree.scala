@@ -34,6 +34,15 @@ class QuadTree[T]() extends SpatialIndex {
     index
   }
 
+  def queryIndex(point: Point): Set[T] = {
+    index.query(point)
+  }
+
+  def queryIndex(x: Double, y: Double): Set[T] = {
+    val point = new GeometryFactory().createPoint(new Coordinate(x, y))
+    index.query(point)
+  }
+
   def writeIndex(filePath: String): Unit = {
     import java.io.FileOutputStream
     import java.io.ObjectOutputStream

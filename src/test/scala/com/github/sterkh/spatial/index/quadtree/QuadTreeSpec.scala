@@ -17,7 +17,6 @@ class QuadTreeSpec extends FlatSpec with Matchers {
   "quadtree create index " should "be correct" in  {
 
     val qt = new QuadTree[String]()
-
     val qti = qt.createIndex(List(square1, square2), 4)
 
     qti should not be null
@@ -26,7 +25,6 @@ class QuadTreeSpec extends FlatSpec with Matchers {
   "quadtree count nodes" should "be correct" in  {
 
     val qt = new QuadTree[String]()
-
     val qti = qt.createIndex(List(square1, square2), 4)
 
     qti.countNodes(qti) should be (45)
@@ -36,9 +34,7 @@ class QuadTreeSpec extends FlatSpec with Matchers {
   "quadtree simple query index " should "be correct" in  {
 
     val qt = new QuadTree[String]()
-
     val qti = qt.createIndex(List(square1, square2), 4)
-
     val point = new GeometryFactory().createPoint(new Coordinate(3.001, 3.001))
 
     val result = qti.query(point)
@@ -46,10 +42,20 @@ class QuadTreeSpec extends FlatSpec with Matchers {
     result should contain theSameElementsAs Set("s1")
   }
 
+  "quadtree simple query index by parent" should "be correct" in  {
+
+    val qt = new QuadTree[String]()
+    qt.createIndex(List(square1, square2), 4)
+    val point = new GeometryFactory().createPoint(new Coordinate(3.001, 3.001))
+
+    val result = qt.queryIndex(point)
+
+    result should contain theSameElementsAs Set("s1")
+  }
+
   "quadtree concave query index " should "be correct" in  {
 
     val qt = new QuadTree[String]()
-
     val qti = qt.createIndex(List(concave), 8)
 
     val result = qti.query(7.1, 4.1)
@@ -61,7 +67,6 @@ class QuadTreeSpec extends FlatSpec with Matchers {
   "quadtree neighbours query index " should "be correct" in  {
 
     val qt = new QuadTree[String]()
-
     val qti = qt.createIndex(List(concave, convex), 8)
 
     val result = qti.query(7.2, 4.2)

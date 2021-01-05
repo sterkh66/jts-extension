@@ -1,10 +1,9 @@
 
-import java.io.{BufferedReader, FileReader}
+import com.github.sterkh.spatial.index.SpatialIndex
 
+import java.io.{BufferedReader, FileReader}
 import com.github.sterkh.spatial.index.strtree.STRTree
 import com.opencsv.CSVReader
-import org.locationtech.jts.io.WKTReader
-
 
 case class City(city: String, state_id: String, state_name: String, county: String, lat: Float, lng: Float)
 
@@ -17,8 +16,6 @@ def getCities(): Seq[City] = {
 
   val lines: List[Array[String]] = csvReader.readAll().asScala.toList
 
-  val wkt = new WKTReader()
-
   val cities = lines.map(line => {
     City(line(0), line(2), line(3), line(5), line(6).toFloat, line(7).toFloat)
   })
@@ -29,7 +26,7 @@ def getCities(): Seq[City] = {
 val t0 = System.nanoTime()
 val st = new STRTree[String]()
 
-val shapes = st.readShapes[String]("/Users/yuri/Documents/wkt/us_states.csv",
+val shapes = SpatialIndex.readShapes[String]("/Users/yuri/Documents/wkt/us_states.csv",
   3, 0, 1, ';')
 
 st.createIndex(shapes)
