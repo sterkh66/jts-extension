@@ -1,4 +1,4 @@
-package com.github.sterkh.spatial.index
+package com.github.sterkh66.spatial.index
 
 import com.opencsv.CSVReader
 import org.locationtech.jts.io.WKTReader

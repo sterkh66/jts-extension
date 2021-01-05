@@ -1,8 +1,8 @@
 
-import com.github.sterkh.spatial.index.SpatialIndex
+import com.github.sterkh66.spatial.index.SpatialIndex
 
 import java.io.{BufferedReader, FileReader}
-import com.github.sterkh.spatial.index.strtree.STRTree
+import com.github.sterkh66.spatial.index.strtree.STRTree
 import com.opencsv.CSVReader
 
 case class City(city: String, state_id: String, state_name: String, county: String, lat: Float, lng: Float)

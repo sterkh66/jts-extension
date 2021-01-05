@@ -1,4 +1,4 @@
-package com.github.sterkh.spatial
+package com.github.sterkh66.spatial
 
 import org.locationtech.jts.geom.Geometry
 

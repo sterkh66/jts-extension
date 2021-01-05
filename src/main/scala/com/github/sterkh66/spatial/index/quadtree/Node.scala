@@ -1,6 +1,6 @@
-package com.github.sterkh.spatial.index.quadtree
+package com.github.sterkh66.spatial.index.quadtree
 
-import com.github.sterkh.spatial.index.Shape
+import com.github.sterkh66.spatial.index.Shape
 import org.locationtech.jts.geom._
 import org.locationtech.jts.io.WKTWriter
 

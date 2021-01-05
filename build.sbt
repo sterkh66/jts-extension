@@ -1,8 +1,8 @@
 name := "jts-extension"
 
-organization := "com.github.sterkh"
+organization := "com.github.sterkh66"
 
-version := "0.3.0-SNAPSHOT"
+version := "0.1.0-SNAPSHOT"
 
 description := "Scala extension for Java Topology Suite (JTS)"
 
@@ -10,9 +10,9 @@ scalaVersion := "2.11.8"
 
 licenses := Seq("GPL-3.0" -> url("https://opensource.org/licenses/GPL-3.0"))
 
-homepage := Some(url("https://github.com/sterkh66/jts-extension"))
+homepage := Some(url(s"https://github.com/sterkh66/$name"))
 
-scmInfo := Some(ScmInfo(url("https://github.com/sterkh66/jts-extension"), "git@github.com:sterkh66/jts-extension.git"))
+scmInfo := Some(ScmInfo(url(s"https://github.com/sterkh66/$name"), s"git@github.com:sterkh66/$name.git"))
 
 developers := List(
   Developer(

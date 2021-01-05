@@ -1,4 +1,4 @@
-package com.github.sterkh.spatial.index.quadtree
+package com.github.sterkh66.spatial.index.quadtree
 
 import org.locationtech.jts.geom.{Envelope, LineSegment}
 import org.scalatest._

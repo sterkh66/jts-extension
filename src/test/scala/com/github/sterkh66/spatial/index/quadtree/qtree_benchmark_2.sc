@@ -1,8 +1,8 @@
 
-import com.github.sterkh.spatial.index.SpatialIndex
+import com.github.sterkh66.spatial.index.SpatialIndex
 
 import java.io.{BufferedReader, FileReader}
-import com.github.sterkh.spatial.index.quadtree.QuadTree
+import com.github.sterkh66.spatial.index.quadtree.QuadTree
 import com.opencsv.CSVReader
 
 

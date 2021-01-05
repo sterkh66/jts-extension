@@ -10,10 +10,9 @@ Example:
 Query polygons containing point
 
 ```scala
-      import com.github.sterkh.spatial.index.quadtree.QuadTree
-      import com.github.sterkh.spatial.index.Shape
+      import com.github.sterkh66.spatial.index.quadtree.QuadTree
+      import com.github.sterkh66.spatial.index.Shape
       import org.locationtech.jts.io.WKTReader
-      
 
       val wkt = new WKTReader()
       val shape = Shape("s1", wkt.read("POLYGON ((3 3, 3 4, 4 4, 4 3, 3 3))"))

@@ -1,6 +1,6 @@
-package com.github.sterkh.spatial.index.strtree
+package com.github.sterkh66.spatial.index.strtree
 
-import com.github.sterkh.spatial.index.{Shape, SpatialIndex}
+import com.github.sterkh66.spatial.index.{Shape, SpatialIndex}
 import org.locationtech.jts.geom.{Coordinate, GeometryFactory, Point}
 import org.locationtech.jts.index.strtree.{ItemBoundable, ItemDistance, STRtree}
 
