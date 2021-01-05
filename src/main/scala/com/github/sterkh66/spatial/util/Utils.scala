@@ -1,11 +1,19 @@
-package com.github.sterkh66.spatial.index.quadtree
+package com.github.sterkh66.spatial.util
 
 import org.locationtech.jts.geom.{Envelope, GeometryFactory, LineSegment}
 
-
+/**
+ *
+ */
 object Utils {
 
-  def intersects (env: Envelope, line: LineSegment): Boolean  = {
+  /**
+   * Fast checks if envelop intersects line segment
+   * @param env
+   * @param line
+   * @return
+   */
+  def intersects(env: Envelope, line: LineSegment): Boolean = {
 
     // fast check if envelop fully contains line segment's envelope
     if (env.contains(line.toGeometry(new GeometryFactory()).getEnvelopeInternal))
@@ -45,7 +53,7 @@ object Utils {
       return false
 
     // intersection point
-//    println(x + u1 * vx, y + u1 * vy)
+    //    println(x + u1 * vx, y + u1 * vy)
 
     true
   }

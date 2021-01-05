@@ -1,5 +1,6 @@
 package com.github.sterkh66.spatial.index.quadtree
 
+import com.github.sterkh66.spatial.util.Utils
 import org.locationtech.jts.geom.{Envelope, LineSegment}
 import org.scalatest._
 
