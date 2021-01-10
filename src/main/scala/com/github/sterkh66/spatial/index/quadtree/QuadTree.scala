@@ -5,9 +5,10 @@ import org.locationtech.jts.geom._
 
 /**
   *
+  * @param radius Радиус буфера для определения ближайшего соседа
   * @tparam T
   */
-class QuadTree[T]() extends SpatialIndex {
+class QuadTree[T](radius: Double = 0.0) extends SpatialIndex {
 
   var extent: Geometry = _
   var shapes = List.empty[Shape[T]]
@@ -21,8 +22,8 @@ class QuadTree[T]() extends SpatialIndex {
     val geomFactory = new GeometryFactory()
     val geomCollection = geomFactory.createGeometryCollection(shapes.map(_.geometry).toArray)
 
-    extent = geomCollection.getEnvelope
-    index = new Node(extent, depth)
+    extent = geomCollection.buffer(radius).getEnvelope
+    index = new Node(extent, depth, radius = radius)
 
     shapes.foreach(shape => {
       index.insert(shape)

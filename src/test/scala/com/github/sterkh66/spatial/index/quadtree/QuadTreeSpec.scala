@@ -87,4 +87,37 @@ class QuadTreeSpec extends FlatSpec with Matchers {
     shape1.contains(shape2) should equal(false)
     shape1.intersects(shape2) should equal(true)
   }
+
+  "quadtree query index with nearest neighbour s1" should "be correct" in  {
+
+    val qt = new QuadTree[String](3.0)
+    qt.createIndex(List(square1, square2), 4)
+    val point = new GeometryFactory().createPoint(new Coordinate(5.0, 5.0))
+
+    val result = qt.queryIndex(point)
+
+    result should contain theSameElementsAs Set("s1")
+  }
+
+  "quadtree query index with nearest neighbour s2" should "be correct" in  {
+
+    val qt = new QuadTree[String](3.0)
+    qt.createIndex(List(square1, square2), 4)
+    val point = new GeometryFactory().createPoint(new Coordinate(12.0, 12.0))
+
+    val result = qt.queryIndex(point)
+
+    result should contain theSameElementsAs Set("s2")
+  }
+
+  "quadtree query index with nearest neighbour too far" should "be correct" in  {
+
+    val qt = new QuadTree[String](3.0)
+    qt.createIndex(List(square1, square2), 4)
+    val point = new GeometryFactory().createPoint(new Coordinate(15.0, 15.0))
+
+    val result = qt.queryIndex(point)
+
+    result should contain theSameElementsAs Set()
+  }
 }

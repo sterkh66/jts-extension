@@ -10,9 +10,14 @@ import org.locationtech.jts.io.WKTWriter
   * @param depth
   * @param level
   * @param id
+  * @param radius
   * @tparam T
   */
-class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) extends Serializable {
+class Node[T](extent: Geometry,
+              depth: Int = 8,
+              level: Int = 0,
+              id: Int = 0,
+              radius: Double = 0.0) extends Serializable {
 
   var northWest: Node[T] = _
   var northEast: Node[T] = _
@@ -58,10 +63,10 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
     val dw = env.getWidth / 2.0
     val dh = env.getHeight / 2.0
 
-    northWest = new Node(toPolygon(new Envelope(cx - dw, cx, cy, cy + dh)), maxLevel, level + 1, (id << 2) + 0)
-    northEast = new Node(toPolygon(new Envelope(cx, cx + dw, cy, cy + dh)), maxLevel, level + 1, (id << 2) + 1)
-    southWest = new Node(toPolygon(new Envelope(cx - dw, cx, cy - dh, cy)), maxLevel, level + 1, (id << 2) + 2)
-    southEast = new Node(toPolygon(new Envelope(cx, cx + dw, cy - dh, cy)), maxLevel, level + 1, (id << 2) + 3)
+    northWest = new Node(toPolygon(new Envelope(cx - dw, cx, cy, cy + dh)), maxLevel, level + 1, (id << 2) + 0, radius)
+    northEast = new Node(toPolygon(new Envelope(cx, cx + dw, cy, cy + dh)), maxLevel, level + 1, (id << 2) + 1, radius)
+    southWest = new Node(toPolygon(new Envelope(cx - dw, cx, cy - dh, cy)), maxLevel, level + 1, (id << 2) + 2, radius)
+    southEast = new Node(toPolygon(new Envelope(cx, cx + dw, cy - dh, cy)), maxLevel, level + 1, (id << 2) + 3, radius)
 
     true
   }
@@ -150,7 +155,7 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
     }
   }
 
-  private def queryPoint(point: Point): Set[Shape[T]] = {
+  private def queryPoint(point: Point, parent: Node[T] = null): Set[Shape[T]] = {
     var result = Set.empty[Shape[T]]
 
     // если есть попадание в текущий квандрант
@@ -161,12 +166,15 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
 
       // и проверить дочерние квадранты, если они есть
       if (northWest != null) {
-        result = northWest.queryPoint(point) ++
-          northEast.queryPoint(point) ++
-          southWest.queryPoint(point) ++
-          southEast.queryPoint(point)
+        result = northWest.queryPoint(point, this) ++
+          northEast.queryPoint(point, this) ++
+          southWest.queryPoint(point, this) ++
+          southEast.queryPoint(point, this)
       } else {
         // если дочерних нет, уточнить результат при необходимости
+        if (result.isEmpty && parent != null && radius > 0.0) {
+          result = nearestNeighbour(point, parent)
+        }
         if (result.size > 1) {
           //println("refine", nodeIdtoString(id))
           result = result.filter(s => s.geometry.contains(point))
@@ -175,6 +183,16 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
     }
 
     result
+  }
+
+  private def nearestNeighbour(point: Point, parent: Node[T] = null): Set[Shape[T]] = {
+    val list = parent.northWest.ids.map(s => (s, s.geometry.distance(point))).toSeq ++
+    parent.northEast.ids.map(s => (s, s.geometry.distance(point))).toSeq ++
+    parent.southWest.ids.map(s => (s, s.geometry.distance(point))).toSeq ++
+    parent.southEast.ids.map(s => (s, s.geometry.distance(point))).toSeq
+
+//    list.sortWith((x,y) => (x._1.id < y._1.id) && (x._2 < y._2))
+    list.sortWith((x,y) => x._2 < y._2).slice(0,1).map(_._1).toSet
   }
 
   private def queryPoint(x: Double, y: Double): Set[Shape[T]] = {
