@@ -11,6 +11,9 @@ class QuadTreeSpec extends FlatSpec with Matchers {
 
   val square1 = Shape("s1", wkt.read("POLYGON ((3 3, 3 4, 4 4, 4 3, 3 3))"))
   val square2 = Shape("s2", wkt.read("POLYGON ((10 10, 10 11, 11 11, 11 10, 10 10))"))
+  val square3 = Shape("s3", wkt.read("POLYGON ((4 3, 4 4, 5 4, 5 3, 4 3))"))
+  val square4 = Shape("s4", wkt.read("POLYGON ((3 2, 3 3, 4 3, 4 2, 3 2))"))
+
   val concave = Shape("cc", wkt.read("POLYGON ((0 4, 3 5, 4 8, 5 5, 8 4, 5 3, 4 0, 3 3, 0 4))"))
   val convex = Shape("cv", wkt.read("POLYGON ((4 8, 5 10, 8 11, 10 7, 8 4, 5 5, 4 8))"))
 
@@ -119,5 +122,27 @@ class QuadTreeSpec extends FlatSpec with Matchers {
     val result = qt.queryIndex(point)
 
     result should contain theSameElementsAs Set()
+  }
+
+  "quadtree query index with nearest neighbour contest 1" should "be correct" in  {
+
+    val qt = new QuadTree[String](2.0)
+    qt.createIndex(List(square1, square3), 4)
+    val point = new GeometryFactory().createPoint(new Coordinate(4.0, 2.0))
+
+    val result = qt.queryIndex(point)
+
+    result should contain theSameElementsAs Set("s1")
+  }
+
+  "quadtree query index with nearest neighbour contest 2" should "be correct" in  {
+
+    val qt = new QuadTree[String](2.0)
+    qt.createIndex(List(square1, square3, square4), 4)
+    val point = new GeometryFactory().createPoint(new Coordinate(4.5, 2.5))
+
+    val result = qt.queryIndex(point)
+
+    result should contain theSameElementsAs Set("s3")
   }
 }
