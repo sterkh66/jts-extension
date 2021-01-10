@@ -176,8 +176,7 @@ class Node[T: Ordering](extent: Geometry,
         // если дочерних нет, уточнить результат при необходимости
         if (result.isEmpty && parent != null && radius > 0.0) {
           result = nearestNeighbour(point, parent)
-        }
-        if (result.size > 1) {
+        } else if (result.size > 1) {
           //println("refine", nodeIdtoString(id))
           result = result.filter(s => s.geometry.contains(point))
         }
@@ -193,7 +192,9 @@ class Node[T: Ordering](extent: Geometry,
       parent.southWest.ids ++
       parent.southEast.ids).map(s => (s, s.geometry.distance(point)))
 
-    neighbours.toSeq.sortBy(u => (u._1.id, u._2)).slice(0,1).map(_._1).toSet
+    neighbours.toSeq.sortBy {
+      case (shape, dist) => (dist, shape.id)
+    }.slice(0, 1).map(_._1).toSet
   }
 
   private def queryPoint(x: Double, y: Double): Set[Shape[T]] = {
