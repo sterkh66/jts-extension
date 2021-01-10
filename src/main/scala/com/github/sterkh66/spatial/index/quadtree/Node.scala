@@ -4,6 +4,8 @@ import com.github.sterkh66.spatial.index.Shape
 import org.locationtech.jts.geom._
 import org.locationtech.jts.io.WKTWriter
 
+//import Ordering.Implicits._
+
 /**
   *
   * @param extent
@@ -13,7 +15,7 @@ import org.locationtech.jts.io.WKTWriter
   * @param radius
   * @tparam T
   */
-class Node[T](extent: Geometry,
+class Node[T: Ordering](extent: Geometry,
               depth: Int = 8,
               level: Int = 0,
               id: Int = 0,
@@ -186,13 +188,12 @@ class Node[T](extent: Geometry,
   }
 
   private def nearestNeighbour(point: Point, parent: Node[T] = null): Set[Shape[T]] = {
-    val list = parent.northWest.ids.map(s => (s, s.geometry.distance(point))).toSeq ++
-    parent.northEast.ids.map(s => (s, s.geometry.distance(point))).toSeq ++
-    parent.southWest.ids.map(s => (s, s.geometry.distance(point))).toSeq ++
-    parent.southEast.ids.map(s => (s, s.geometry.distance(point))).toSeq
+    val neighbours = (parent.northWest.ids ++
+      parent.northEast.ids ++
+      parent.southWest.ids ++
+      parent.southEast.ids).map(s => (s, s.geometry.distance(point)))
 
-//    list.sortWith((x,y) => (x._1.id < y._1.id) && (x._2 < y._2))
-    list.sortWith((x,y) => x._2 < y._2).slice(0,1).map(_._1).toSet
+    neighbours.toSeq.sortBy(u => (u._1.id, u._2)).slice(0,1).map(_._1).toSet
   }
 
   private def queryPoint(x: Double, y: Double): Set[Shape[T]] = {

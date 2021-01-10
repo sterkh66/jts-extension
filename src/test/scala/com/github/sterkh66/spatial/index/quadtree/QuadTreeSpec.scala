@@ -143,6 +143,6 @@ class QuadTreeSpec extends FlatSpec with Matchers {
 
     val result = qt.queryIndex(point)
 
-    result should contain theSameElementsAs Set("s3")
+    result should contain theSameElementsAs Set("s1")
   }
 }

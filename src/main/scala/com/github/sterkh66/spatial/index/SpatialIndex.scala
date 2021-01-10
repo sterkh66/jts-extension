@@ -9,7 +9,7 @@ trait SpatialIndex extends Serializable {}
 
 object SpatialIndex {
 
-  def readShapes[T](csvFilePath: String,
+  def readShapes[T: Ordering](csvFilePath: String,
                     idColumn: Int,
                     wktColumn: Int,
                     fromLine: Int = 1,

@@ -8,7 +8,7 @@ import org.locationtech.jts.geom._
   * @param radius Радиус буфера для определения ближайшего соседа
   * @tparam T
   */
-class QuadTree[T](radius: Double = 0.0) extends SpatialIndex {
+class QuadTree[T: Ordering](radius: Double = 0.0) extends SpatialIndex {
 
   var extent: Geometry = _
   var shapes = List.empty[Shape[T]]
