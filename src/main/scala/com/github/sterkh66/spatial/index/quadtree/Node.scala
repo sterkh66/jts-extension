@@ -19,6 +19,7 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
   var southWest: Node[T] = _
   var southEast: Node[T] = _
 
+  // Набор фигур, которые захватывают текущий квадрант
   var ids = Set.empty[Shape[T]]
 
   //  println(id)
@@ -44,7 +45,7 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
     wkt.write(geometry)
   }
 
-  private def addShape(shape: Shape[T]){
+  private def addShape(shape: Shape[T]) {
     ids = ids + shape
     //    if (level == 5 && nodeIdtoString(id) == "13322")
     //      println(level, id, nodeIdtoString(id), ids)
@@ -103,7 +104,7 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
 
     var id = nodeId
 
-    while (id > 0){
+    while (id > 0) {
       idStr = idStr + (id & 0x03).toString
       id = id >> 2
     }
@@ -150,24 +151,23 @@ class Node[T](extent: Geometry, depth: Int = 8, level: Int = 0, id: Int = 0) ext
   }
 
   private def queryPoint(point: Point): Set[Shape[T]] = {
-
     var result = Set.empty[Shape[T]]
 
     // если есть попадание в текущий квандрант
-    if (extent.getEnvelopeInternal.contains(point.getX, point.getY)){
+    if (extent.getEnvelopeInternal.contains(point.getX, point.getY)) {
       // добавить в результирующий набор все ID из текущего квадранта
       result = ids
       //      println(nodeIdtoString(id), id, level, ids)
 
       // и проверить дочерние квадранты, если они есть
-      if (northWest != null){
+      if (northWest != null) {
         result = northWest.queryPoint(point) ++
           northEast.queryPoint(point) ++
           southWest.queryPoint(point) ++
           southEast.queryPoint(point)
       } else {
         // если дочерних нет, уточнить результат при необходимости
-        if (result.size > 1){
+        if (result.size > 1) {
           //println("refine", nodeIdtoString(id))
           result = result.filter(s => s.geometry.contains(point))
         }

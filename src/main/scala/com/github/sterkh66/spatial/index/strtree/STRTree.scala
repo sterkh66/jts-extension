@@ -27,33 +27,33 @@ class STRTree[T] extends SpatialIndex {
     queryIndex(point)
   }
 
-  def queryIndex(x: Double, y: Double, radiusDeg: Double): Set[T] = {
+  def queryIndex(x: Double, y: Double, radius: Double): Set[T] = {
     val point = new GeometryFactory().createPoint(new Coordinate(x, y))
-    queryIndex(point, radiusDeg)
+    queryIndex(point, radius)
   }
 
   def queryIndex(x: Double, y: Double, neighboursMax: Int): Set[T] = {
     val point = new GeometryFactory().createPoint(new Coordinate(x, y))
-    queryIndex(point, radiusDeg = 0.0, neighboursMax)
+    queryIndex(point, radius = 0.0, neighboursMax)
   }
 
-  def queryIndex(x: Double, y: Double, radiusDeg: Double, neighboursMax: Int): Set[T] = {
+  def queryIndex(x: Double, y: Double, radius: Double, neighboursMax: Int): Set[T] = {
     val point = new GeometryFactory().createPoint(new Coordinate(x, y))
-    queryIndex(point,radiusDeg, neighboursMax)
+    queryIndex(point, radius, neighboursMax)
   }
 
-  def queryIndex(point: Point, radiusDeg: Double = 0.0, neighboursMax: Int = 3): Set[T] = {
+  def queryIndex(point: Point, radius: Double = 0.0, neighboursMax: Int = 3): Set[T] = {
     import collection.JavaConverters._
 
     val hits = strTree.query(point.getEnvelopeInternal).asScala.map(_.asInstanceOf[Shape[T]])
 
     hits.filter(_.geometry.intersects(point)).map(_.id) match {
       case s @ Seq(_, _*) => s.toSet
-      case Seq() if radiusDeg > 0.0 =>
+      case Seq() if radius > 0.0 =>
         val neighbours = strTree.nearestNeighbour(point.getEnvelopeInternal,
           Shape(0L, point), new Distance, neighboursMax).map(_.asInstanceOf[Shape[T]])
 
-        neighbours.filter(_.geometry.isWithinDistance(point, radiusDeg)).map(_.id).toSet
+        neighbours.filter(_.geometry.isWithinDistance(point, radius)).map(_.id).toSet
 
       case _ => Set.empty[T]
     }
